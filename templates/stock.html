@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js" integrity="sha512-+l9L4lMTFNy3dEglQpprf7jQBhQsQ3/WvOnjaN/+/L4i0jOstgScV0q2TjfvRF4V+ZePMDuZYIQtg5T4MKr+MQ==" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+        socket.on('message', function(msg) {
+        if(msg){
+            $('#equityLimit').text(`Equity Limit - ${msg['equityLimit']}Rs`)
+            $('#commodityLimit').text(`Commodity Limit - ${msg['commodityLimit']}Rs`)
+            $('#symbol').html("COPPER - <br>")
+            for(var i of msg['stock_price']){
+                $('#symbol').append(`${i['tradingSymbol']} - ${i['lastTradedPrice']}Rs<br>`)
+            }
+            socket.emit('message', msg)
+          }
+       });
+</script>
+</head>
+<body>
+    <div style="text-align: center">
+        <h2>Balance: </h2><h2 id="equityLimit"></h2><h2 id="commodityLimit"></h2>
+        <h1 id="symbol"></h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <input type="text" name="symbolName" value="COPPER" placeholder="Symbol Name"><br>
+        <input type="text" name="exchange" value="MCX" placeholder="Exchange"><br>
+        <input type="text" name="quantity" placeholder="Quantity"><br>
+        <input type="number" name="price" placeholder="Price"><br>
+        <select name="transactionType">
+            <option value="SELL">SELL</option>
+            <option value="BUY">BUY</option>
+        </select><br>
+        <input type="text" name="orderType" value="L" placeholder="Order Type"><br>
+        <input type="text" name="disclosedQuantity" placeholder="Disclosed Quantity"><br>
+        <input type="text" name="priceType"  placeholder="Price Type"><br>
+        <input type="number" name="triggerPrice" placeholder="Trigger Price"><br>
+        <input type="text" name="orderValidity" value="DAY" placeholder="Order Validity"><br>
+        <input type="text" name="productType" value="BO" placeholder="Product Type"><br>
+        <input type="text" name="squareOffValue"  placeholder="Square Off Value"><br>
+        <input type="text" name="stopLossValue" placeholder="Stop Loss Value"><br>
+        <input type="text" name="valueType" placeholder="Value Type"><br>
+        <input type="text" name="trailingStopLoss" placeholder="Trailing Stop Loss"><br><br>
+        <input type="submit">
+    </form>
+    </div>
+
+</body>
+</html>
+
